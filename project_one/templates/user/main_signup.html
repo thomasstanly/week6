@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}Signup{% endblock title %}
+{% block content %}
+
+<section class="text-center text-lg-start overflow-hidden">
+    <div class="container py-4">
+      <div class="row g-0 align-items-center">
+        <div class="col-lg-6 mb-5 mb-lg-0">
+          <div class="card cascading-right">
+            <div class="card-body p-5 shadow-5 text-center">
+              <h2 class="fw-bold mb-5">Sign up now</h2>
+              {% for message in  messages%}
+                <div class="alert alert-{{message.tags}} alert-dismissible fade show col-xl-5 col-lg-6 col-md-7 col-10 mx-auto" role="alert">
+                  <strong>{{message}}</strong> 
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              {% endfor %}
+              <form method="POST" action="{% url 'signup_page' %}">{% csrf_token %}
+                <!-- username input -->
+                <div class="form-outline mb-4">
+                  <input name="username" type="text" id="form3Example3" class="form-control" />
+                  <label class="form-label" for="form3Example3">username</label>
+                </div>
+  
+                <!-- Password input -->
+                <div class="form-outline mb-4">
+                  <input name="password" type="password" id="form3Example4" class="form-control" />
+                  <label class="form-label" for="form3Example4">Password</label>
+                </div>
+                
+                <!-- confirm password input-->
+                <div class="form-outline mb-4">
+                  <input name="confirm_password" type="password" id="form3Example4" class="form-control" />
+                  <label class="form-label" for="form3Example4">Confirm Password</label>
+                </div>
+  
+                <!-- Submit button -->
+                <button type="submit" class="btn btn-primary btn-block mb-4">
+                  Sign up
+                </button>
+                <div class="text-center">
+                  <p>already user?<a href="{% url 'login_page' %}">Login</a></p>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+  
+        <div class="col-lg-6 mb-5 mb-lg-0">
+          <img src="https://mdbootstrap.com/img/new/ecommerce/vertical/004.jpg" class="rounded-4 shadow-4"
+            alt="signup image" style="width: 30vw; height: 90vh;"/>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock content %}

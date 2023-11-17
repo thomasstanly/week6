@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Home{% endblock title %}
+{% block content %}
+<nav class="navbar bg-body-tertiary justify-content-end">
+  <form action="{% url 'logout_page' %}" class="container-fluid ">
+    {% csrf_token %}
+    <h4>welcone {{user | upper}}</h4>
+    <button class="btn btn-outline-success me-2" type="Submit">
+      logout
+    </button>
+  </form>
+  
+</nav>
+{% endblock content %}

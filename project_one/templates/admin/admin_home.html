@@ -1,0 +1,156 @@
+{% extends 'admin/admin_base.html' %}
+{% block title %}admin home{% endblock title %}
+{% load static %}
+{% block admin_content %}
+<P class="h3 mt-5"> USER DETAILS {{email}}</P>
+{% for message in  messages%}
+  <div class="alert alert-{{message.tags}} alert-dismissible fade show col-xl-5 col-lg-6 col-md-7 col-10 mx-auto" role="alert">
+    <strong>{{message}}</strong> 
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+{% endfor %}
+<table class="table align-middle mb-0 bg-white">
+    <thead class="bg-light">
+      <tr>
+        <th class="text-center">Id</th>
+        <th class="text-center">Name</th>
+        <th class="text-center">Super User</th>
+        <th class="text-center">Joined</th>
+        <th class="text-center">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+      <tr>
+        <td class="text-center">{{user.id}}</td>
+        <td >
+            <div class="d-flex align-items-center ">
+                <div class="ms-3">
+                <p class="fw-bold mb-1">{{user.username}}</p>
+                <p class="text-muted mb-0">{{user.email | default:"email is not provided"}}</p>
+                </div>
+            </div>
+        </td>
+        <td class="text-center">
+            <p class="fw-normal mb-1">{{user.is_superuser}}</p>
+        </td>
+        <td class="text-center">
+            <span >{{user.date_joined}}</span>
+        </td>
+        <td class="text-center">        
+            <i class="fa-regular fa-pen-to-square fa-xl" data-bs-toggle="modal" data-bs-target="#edit_data-{{forloop.counter}}" style="color: #2a13d8; cursor: pointer;"></i>
+            <span>&nbsp;&nbsp;&nbsp;</span>
+            <i class="fa-solid fa-trash fa-xl" data-bs-toggle="modal" data-bs-target="#delete_data-{{forloop.counter}}" style="color: #da1b1b; font-size:900; cursor: pointer;"></i>
+        </td>
+      </tr>  
+      {% endfor %} 
+    </tbody>
+  </table>
+  <!-- modal for deleting the data -->
+  {% for user in users %}
+    <div id="delete_data-{{forloop.counter}}" class="modal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">warning</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure about deleting {{user.username}}</p>
+          </div>
+          <div class="modal-footer">
+            <form action="{% url 'admin_delete' user.id %}" method="POST">{% csrf_token %}
+              <button type="submit" class="btn btn-primary">delete</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+    
+  <!-- modal for editing -->
+  {% for user in users %}
+  <div class="modal fade-" id="edit_data-{{forloop.counter}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Edit User details</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form action="{% url 'admin_edit' user.id %}" method="POST">{% csrf_token %}
+                <!-- Name -->
+                <div class="form-outline  mb-4">
+                    <input name="username" type="text" id="usrename" class="form-control" value="{{user.username}}" />
+                    <label class="form-label" for="usrename">Username</label>
+                </div>
+                
+                <!-- email -->
+                <div class="form-outline mb-4">
+                  <input name="user_email" type="email" id="user_email" class="form-control" value="{{user.email}}" />
+                  <label class="form-label" for="user_email">Email</label>
+                </div>
+
+                <!-- password -->
+                <div class="form-outline mb-4">
+                    <input name="password" type="password" id="user_password" class="form-control"/>
+                    <label class="form-label" for="user_password">Password</label>
+                </div>
+                
+                <!-- confirm password -->
+                <div class="form-outline mb-4">
+                    <input name="confirm_password" type="password" id="user_confpassword" class="form-control" />
+                    <label class="form-label" for="user_confpassword">Confirm Password</label>
+                </div>
+                
+                <!-- Submit button -->
+                <button type="submit" class="btn btn-primary btn-block mb-4">Save Changes</button>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %} 
+<!-- modal for creating user -->
+<div class="modal fade" id="create_user" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Create a user</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form action="{% url 'admin_create' %}" method="POST"> {% csrf_token %}
+                <!-- Name -->
+                  <div class="form-outline mb-4">
+                      <input name="username" type="text" id="username" class="form-control" required/>
+                      <label class="form-label" for="form6Example1">Username</label>
+                  </div>
+                
+                <!-- email -->
+                <div class="form-outline mb-4">
+                    <input name="user_email" type="email" id="user_email" class="form-control" />
+                    <label class="form-label" for="user_email">Email</label>
+                </div> 
+                
+                <!-- password -->
+                <div class="form-outline mb-4">
+                    <input name="password" type="password" id="user_password" class="form-control" required/>
+                    <label class="form-label" for="user_password">Password</label>
+                </div>
+                
+                <!-- confirm password -->
+                <div class="form-outline mb-4">
+                    <input name="confirm_password" type="password" id="user_confpassword" class="form-control" required/>
+                    <label class="form-label" for="user_confpassword">Confirm Password</label>
+                </div>
+                
+                <!-- Submit button -->
+                <button type="submit" class="btn btn-primary btn-block mb-4">Save</button>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+{% endblock admin_content %}

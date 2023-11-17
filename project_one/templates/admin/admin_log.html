@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} AD login{% endblock title %}
+{% block content %}
+<div class="container">
+  <img class="rounded mx-auto d-block" src="{% static 'images/welcome_admin1.jpg' %}" alt="welcome image">
+  {% for message in  messages%}
+  <div class="alert alert-{{message.tags}} alert-dismissible fade show col-xl-5 col-lg-6 col-md-7 col-10 mx-auto" role="alert">
+    <strong>{{message}}</strong> 
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endfor %}
+  <form class="col-xl-5 col-lg-6 col-md-7 col-10 mx-auto" action="{% url 'adm_log_page' %}" method="POST">{% csrf_token %}
+    <!-- username--> 
+    <div class="form-outline mb-4">
+      <input name="admin_username" type="text" id="form2Example1" class="form-control" required />
+      <label class="form-label" for="form2Example1">Username</label>
+    </div>
+
+    <!-- Password input -->
+    <div class="form-outline mb-4">
+      <input name="admin_password" type="password" id="form2Example2" class="form-control" />
+      <label class="form-label" for="form2Example2">Password</label>
+    </div>
+
+    <!-- Submit button -->
+    <button type="Submit" class="btn btn-primary mb-4 w-100" >log in</button>
+  </form>
+</div>
+{% endblock content %}
+    
+    
